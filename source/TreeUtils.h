@@ -2,7 +2,17 @@
 #define TREEUTILS_H
 
 #include <stdio.h>
+#include <stdlib.h>
 
-#define TEST_FLAG 8
+typedef struct TreeNode {
+    char hash[64];
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+void printTree(TreeNode *root, int level);
+void freeTree(TreeNode *root);
+TreeNode **generateLeaves(int numTx);
+TreeNode **createNextLevel(TreeNode **currentLevel, int currentLevelSize);
 
 #endif
