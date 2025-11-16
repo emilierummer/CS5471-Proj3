@@ -2,6 +2,15 @@
 #include <string.h>
 #include <openssl/sha.h>
 
+// TODO: Computes SHA-256 hash of the input data
+unsigned char *hash(const char *data) {
+    unsigned char *hash = malloc(64 * sizeof(char));
+    snprintf((char *)hash, 64, "H(%s)", data);
+    // unsigned char *hash = malloc(SHA256_DIGEST_LENGTH * sizeof(char));
+    // SHA256((const unsigned char *)data, strlen(data), hash);
+    return hash;
+}
+
 // Prints the tree nodes in order
 void printTree(TreeNode *root, int level) {
     if (root == NULL) {
@@ -28,6 +37,7 @@ TreeNode **generateLeaves(int numTx) {
     for (int i = 0; i < numTx; i++) {
         leaves[i] = malloc(sizeof(TreeNode));
         snprintf(leaves[i]->hash, 64, "Tx%d", i + 1);
+        snprintf(leaves[i]->hash, 64, "%s", (char *)hash(leaves[i]->hash));
         leaves[i]->left = NULL;
         leaves[i]->right = NULL;
     }
@@ -42,6 +52,7 @@ TreeNode **createNextLevel(TreeNode **currentLevel, int currentLevelSize) {
     for (int i = 0; i < nextLevelSize; i++) {
         nextLevel[i] = malloc(sizeof(TreeNode));
         snprintf(nextLevel[i]->hash, 64, "%s+%s", currentLevel[2 * i]->hash, currentLevel[2 * i + 1]->hash);
+        snprintf(nextLevel[i]->hash, 64, "%s", (char *)hash(nextLevel[i]->hash));
         nextLevel[i]->left = currentLevel[2 * i];
         nextLevel[i]->right = currentLevel[2 * i + 1];
     }

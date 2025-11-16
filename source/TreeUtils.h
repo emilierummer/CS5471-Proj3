@@ -10,6 +10,8 @@ typedef struct TreeNode {
     struct TreeNode *right;
 } TreeNode;
 
+unsigned char *hash(const char *data);
+
 void printTree(TreeNode *root, int level);
 void freeTree(TreeNode *root);
 TreeNode **generateLeaves(int numTx);

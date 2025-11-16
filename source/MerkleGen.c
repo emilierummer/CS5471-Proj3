@@ -1,16 +1,32 @@
 #include "TreeUtils.h"
 
-int main() {
-    printf("MerkleGen program started.\n");
-    int numTx = 4;
+int main(int argc, char *argv[]) {
+    // Process command-line arguments
+    if (argc != 3) {
+        printf("Usage: MerkleGen <n> <Txi>\n");
+        return 1;
+    }
+
+    int n = atoi(argv[1]);
+    if (n < 1 || n > 12) {
+        printf("Error: n must be between 1 and 12.\n");
+        return 1;
+    }
+    int numTx = 1 << n; // 2^n transactions
+
+    if (argv[2][0] != 'T' || argv[2][1] != 'x') {
+        printf("Error: Transactions must be in the format Txi where i is the transaction number.\n");
+        return 1;
+    }
+    int txIndex = atoi(&argv[2][2]);
+    if (txIndex < 1 || txIndex > numTx) {
+        printf("Error: Txi must be between 1 and %d.\n", numTx);
+        return 1;
+    }
+
 
     // Generate leaf node for each Tx
     TreeNode **leaves = generateLeaves(numTx);
-
-    // Print leaf nodes
-    for (int i = 0; i < numTx; i++) {
-        printf("Leaf %d Hash: %s\n", i + 1, leaves[i]->hash);
-    }
 
     // Create the Merkle Tree (bottom-up)
     while (numTx > 1) {
