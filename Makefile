@@ -15,4 +15,4 @@ VerifyTx: $(SRCDIR)/VerifyTx.c TreeUtils
 	$(CC) $(CFLAGS) -o VerifyTx $(SRCDIR)/VerifyTx.c TreeUtils.o
 
 clean:
-	rm -rf MerkleGen VerifyTx TreeUtils.o
+	rm -rf MerkleGen VerifyTx TreeUtils.o root.txt branch.txt

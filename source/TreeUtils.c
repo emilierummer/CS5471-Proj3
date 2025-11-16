@@ -55,6 +55,20 @@ TreeNode **createNextLevel(TreeNode **currentLevel, int currentLevelSize) {
         snprintf(nextLevel[i]->hash, 64, "%s", (char *)hash(nextLevel[i]->hash));
         nextLevel[i]->left = currentLevel[2 * i];
         nextLevel[i]->right = currentLevel[2 * i + 1];
+        currentLevel[2 * i]->parent = nextLevel[i];
+        currentLevel[2 * i + 1]->parent = nextLevel[i];
     }
     return nextLevel;
+}
+
+// Returns the sibling of a given node
+TreeNode *getSibling(TreeNode *node) {
+    if (node == NULL || node->parent == NULL) {
+        return NULL;
+    }
+    if (node->parent->left == node) {
+        return node->parent->right;
+    } else {
+        return node->parent->left;
+    }
 }
