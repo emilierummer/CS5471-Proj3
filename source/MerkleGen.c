@@ -64,9 +64,6 @@ int main(int argc, char *argv[]) {
     fprintf(rootFile, "%X\n", leaves[0]->hash);
     fclose(rootFile);
 
-    // Print tree
-    printTree(leaves[0], 0);
-
     // Store Merkle branch in branch.txt
     TreeNode **merkleBranch = getMerkleBranch(txNode, n);
     FILE *branchFile = fopen("branch.txt", "w");

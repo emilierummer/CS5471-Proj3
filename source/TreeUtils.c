@@ -43,7 +43,6 @@ TreeNode **generateLeaves(int numTx) {
         leaves[i] = malloc(sizeof(TreeNode));
         snprintf(leaves[i]->hash, 64, "Tx%d", i + 1);
 	unsigned char *leafHash = hash(leaves[i]->hash);
-	printf("Hash for %s: %s\n", leaves[i]->hash, leafHash);
         snprintf(leaves[i]->hash, 64, "%s", leafHash);
 	free(leafHash);
         leaves[i]->left = NULL;
