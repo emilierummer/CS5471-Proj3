@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
         perror("Failed to open root.txt");
         return 1;
     }
-    fprintf(rootFile, "%s\n", leaves[0]->hash);
+    fprintf(rootFile, "%X\n", leaves[0]->hash);
     fclose(rootFile);
 
     // Print tree
@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
     }
     for (int i = 0; i < n; i++) {
         if (merkleBranch[i] != NULL) {
-            fprintf(branchFile, "%s\n", merkleBranch[i]->hash);
+            fprintf(branchFile, "%X\n", merkleBranch[i]->hash);
             free(merkleBranch[i]);
         } else {
             fprintf(branchFile, "NULL\n");
