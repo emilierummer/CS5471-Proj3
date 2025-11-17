@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     int txIndex = atoi(&argv[2][2]) - 1; // Convert to 0-based index
     if (txIndex < 0 || txIndex >= numTx) {
         printf("Error: Txi must be between 1 and %d.\n", numTx);
-        return 1;
+        return 2;
     }
 
 
