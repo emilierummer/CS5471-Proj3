@@ -2,13 +2,18 @@
 #include <string.h>
 #include <openssl/sha.h>
 
-// TODO: Computes SHA-256 hash of the input data
+// Computes SHA-256 hash of the input data
 unsigned char *hash(const char *data) {
-    unsigned char *hash = malloc(64 * sizeof(char));
-    snprintf((char *)hash, 64, "H(%s)", data);
-    // unsigned char *hash = malloc(SHA256_DIGEST_LENGTH * sizeof(char));
-    // SHA256((const unsigned char *)data, strlen(data), hash);
-    return hash;
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256((const unsigned char *)data, strlen(data), hash);
+
+    // Convert to hex string (64 chars and null terminator)
+    unsigned char *hex = malloc(SHA256_DIGEST_LENGTH * 2 + 1);
+    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+	sprintf((char *)hex + (i * 2), "%02x", hash[i]);
+    }
+
+    return hex;
 }
 
 // Prints the tree nodes in order
@@ -37,7 +42,10 @@ TreeNode **generateLeaves(int numTx) {
     for (int i = 0; i < numTx; i++) {
         leaves[i] = malloc(sizeof(TreeNode));
         snprintf(leaves[i]->hash, 64, "Tx%d", i + 1);
-        snprintf(leaves[i]->hash, 64, "%s", (char *)hash(leaves[i]->hash));
+	unsigned char *leafHash = hash(leaves[i]->hash);
+	printf("Hash for %s: %s\n", leaves[i]->hash, leafHash);
+        snprintf(leaves[i]->hash, 64, "%s", leafHash);
+	free(leafHash);
         leaves[i]->left = NULL;
         leaves[i]->right = NULL;
     }
@@ -51,8 +59,11 @@ TreeNode **createNextLevel(TreeNode **currentLevel, int currentLevelSize) {
     TreeNode **nextLevel = malloc(nextLevelSize * sizeof(TreeNode *));
     for (int i = 0; i < nextLevelSize; i++) {
         nextLevel[i] = malloc(sizeof(TreeNode));
-        snprintf(nextLevel[i]->hash, 64, "%s+%s", currentLevel[2 * i]->hash, currentLevel[2 * i + 1]->hash);
-        snprintf(nextLevel[i]->hash, 64, "%s", (char *)hash(nextLevel[i]->hash));
+	unsigned char combinedHashes[128];
+        snprintf(combinedHashes, 128, "%s%s", currentLevel[2 * i]->hash, currentLevel[2 * i + 1]->hash);
+	unsigned char *nodeHash = hash(combinedHashes);
+        snprintf(nextLevel[i]->hash, 64, "%s", nodeHash);
+	free(nodeHash);
         nextLevel[i]->left = currentLevel[2 * i];
         nextLevel[i]->right = currentLevel[2 * i + 1];
         currentLevel[2 * i]->parent = nextLevel[i];
