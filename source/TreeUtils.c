@@ -2,12 +2,10 @@
 #include <string.h>
 #include <openssl/sha.h>
 
-// TODO: Computes SHA-256 hash of the input data
+// Computes SHA-256 hash of the input data
 unsigned char *hash(const char *data) {
-    unsigned char *hash = malloc(64 * sizeof(char));
-    snprintf((char *)hash, 64, "H(%s)", data);
-    // unsigned char *hash = malloc(SHA256_DIGEST_LENGTH * sizeof(char));
-    // SHA256((const unsigned char *)data, strlen(data), hash);
+    unsigned char *hash = malloc(SHA256_DIGEST_LENGTH * sizeof(char));
+    SHA256((const unsigned char *)data, strlen(data), hash);
     return hash;
 }
 
